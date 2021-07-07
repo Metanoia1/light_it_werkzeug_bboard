@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+{% block title %}ADD ANNOUNCEMENT{% endblock %}
+{% block body %}
+  <br>
+  <form method="POST">
+    <input class="form-control" type="text" maxlength="100"
+           required
+           name="author" 
+           placeholder="author"><br>
+    <input class="form-control" type="text" maxlength="100"
+           required
+           name="title"
+           placeholder="title"><br>
+    <input class="form-control" type="text" maxlength="1000"
+           required
+           name="text"
+           placeholder="text"><br>
+    <div class="col-12">
+        <button class="btn btn-primary" type="submit">add</button>
+    </div>
+  </form>
+{% endblock %}
