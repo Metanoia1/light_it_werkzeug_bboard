@@ -40,8 +40,6 @@ class BBoard(object):
         try:
             endpoint, values = adapter.match()
             return getattr(self, f"on_{endpoint}")(request, **values)
-        except NotFound:
-            return self.error_404()
         except HTTPException as e:
             return e
 
@@ -51,7 +49,9 @@ class BBoard(object):
         return response(environ, start_response)
 
     def on_index(self, request):
-        context = {"announcements": session.query(Announcement).all()}
+        announcements = session.query(Announcement).all()
+        print(dir(announcements[0].created_date))
+        context = {"announcements": announcements}
         return self.render_template("index.html", **context)
 
     def on_add_announcement(self, request):
@@ -62,15 +62,22 @@ class BBoard(object):
                 text=f"{request.values['text']}",
             )
             session.add(new_announcement)
+        try:
             session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
         context = {}
         return self.render_template("add_announcement.html", **context)
 
     def on_announcement(self, request, id_):
-        print(id_)
         announcement = session.query(Announcement).filter_by(id=id_).first()
+        comments = announcement.comments
         context = {
             "announcement": announcement,
+            "comments": comments,
         }
         return self.render_template("announcement.html", **context)
 
@@ -86,4 +93,6 @@ def application(environ, start_response):
 if __name__ == "__main__":
     from werkzeug.serving import run_simple
 
-    # run_simple("127.0.0.1", 5000, BBoard(), use_debugger=True, use_reloader=True)
+#     run_simple(
+#         "127.0.0.1", 5000, BBoard(), use_debugger=True, use_reloader=True
+#     )

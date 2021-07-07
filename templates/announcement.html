@@ -1,8 +1,20 @@
 {% extends "index.html" %}
 {% block title %}ANNOUNCEMENT{% endblock %}
 {% block body %}
-  <p>Author: {{ announcement.author }}</p><br>
-  <p>Title: {{ announcement.title }}</p><br>
-  <p>Text:</p><br>
+  <p>Author: {{ announcement.author }}</p>
+  <p>Title: {{ announcement.title }}</p>
+  <p>Publication date:
+    {{ announcement.created_date.date() }}
+    {{ announcement.created_date.hour }}:{{ announcement.created_date.minute }}
+  </p>
   <p>{{ announcement.text }}</p>
+  {% if comments %}
+    <hr>
+    <h5>comments:</h5>
+  {% endif %}
+  {% for comment in comments %}
+    <hr>
+    <p>author: {{ comment.author }}</p>
+    <p>{{ comment.text }}</p>
+  {% endfor %}
 {% endblock %}
