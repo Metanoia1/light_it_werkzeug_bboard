@@ -50,7 +50,6 @@ class BBoard(object):
 
     def on_index(self, request):
         announcements = session.query(Announcement).all()
-        print(dir(announcements[0].created_date))
         context = {"announcements": announcements}
         return self.render_template("index.html", **context)
 
