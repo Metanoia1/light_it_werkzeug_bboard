@@ -37,6 +37,7 @@ class Announcement(Base):
     def __repr__(self):
         return f"{self.title} ({self.author})"
 
+
 class Comment(Base):
     __tablename__ = "comments"
 
