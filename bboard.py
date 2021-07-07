@@ -26,7 +26,8 @@ class BBoard(object):
         self.url_map = Map(
             [
                 Rule("/", endpoint="index"),
-                Rule("/<add>", endpoint="add_announcement"),
+                Rule("/add-announcement/", endpoint="add_announcement"),
+                Rule("/announcement/<int:id_>/", endpoint="announcement"),
             ]
         )
 
@@ -53,7 +54,7 @@ class BBoard(object):
         context = {"announcements": session.query(Announcement).all()}
         return self.render_template("index.html", **context)
 
-    def on_add_announcement(self, request, add):
+    def on_add_announcement(self, request):
         if request.method == "POST":
             new_announcement = Announcement(
                 author=f"{request.values['author']}",
@@ -64,6 +65,14 @@ class BBoard(object):
             session.commit()
         context = {}
         return self.render_template("add_announcement.html", **context)
+
+    def on_announcement(self, request, id_):
+        print(id_)
+        announcement = session.query(Announcement).filter_by(id=id_).first()
+        context = {
+            "announcement": announcement,
+        }
+        return self.render_template("announcement.html", **context)
 
     def __call__(self, environ, start_response):
         return self.wsgi_app(environ, start_response)
@@ -76,4 +85,4 @@ def application(environ, start_response):
 
 if __name__ == "__main__":
     from werkzeug.serving import run_simple
-    # run_simple("127.0.0.1", 5000, app, use_debugger=True, use_reloader=True)
+    # run_simple("127.0.0.1", 5000, BBoard(), use_debugger=True, use_reloader=True)

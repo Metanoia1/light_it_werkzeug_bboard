@@ -18,6 +18,7 @@ from sqlalchemy import (
 )
 
 
+# DATABASE_URL = os.environ["BBOARD"]
 DATABASE_URL = os.environ["DATABASE_URL"]
 DATABASE_URL = f"postgresql{DATABASE_URL[len('postgres'):]}"
 conn = psycopg2.connect(DATABASE_URL, sslmode="require")

@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+{% block title %}ANNOUNCEMENT{% endblock %}
+{% block body %}
+  <p>Author: {{ announcement.author }}</p><br>
+  <p>Title: {{ announcement.title }}</p><br>
+  <p>Text:</p><br>
+  <p>{{ announcement.text }}</p>
+{% endblock %}

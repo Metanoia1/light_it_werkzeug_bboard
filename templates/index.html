@@ -17,7 +17,11 @@
   <div class="container-fluid">
     {% block body %}
       {% for announcement in announcements %}
-        <p>{{ announcement }}</p>
+        <p>Author: {{ announcement.author }}</p>
+        <p>Title: {{ announcement.title }}</p>
+        <p>Text: {{ announcement.text }}</p>
+        <a href="/announcement/{{ announcement.id }}/">details</a>
+        <hr>
       {% endfor %}
     {% endblock %}
   </div>
