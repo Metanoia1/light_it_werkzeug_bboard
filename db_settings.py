@@ -58,5 +58,6 @@ class Comment(Base):
 
 engine = create_engine(DATABASE_URL)
 Base.metadata.create_all(engine)
+
 Session = sessionmaker()
 Session.configure(bind=engine)
