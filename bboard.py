@@ -9,11 +9,12 @@ from werkzeug.utils import redirect
 from werkzeug.wrappers import Request
 from werkzeug.wrappers import Response
 
-from db_settings import Announcement, Comment, Session
+from db_settings import Announcement, Comment, Session, connect_db
 
 
 class BBoard:
     def __init__(self, session):
+        self.conn = connect_db()
         self.session = session
         template_path = os.path.join(os.path.dirname(__file__), "templates")
         self.jinja_env = Environment(
@@ -23,7 +24,8 @@ class BBoard:
         self.url_map = Map(
             [
                 Rule("/", endpoint="index"),
-                Rule("/add-announcement/", endpoint="add_announcement"), Rule("/<int:id_>/", endpoint="announcement"),
+                Rule("/add-announcement/", endpoint="add_announcement"),
+                Rule("/<int:id_>/", endpoint="announcement"),
                 Rule("/delete/<int:id_>/", endpoint="delete"),
             ],
         )
@@ -92,18 +94,18 @@ class BBoard:
         return self.wsgi_app(environ, start_response)
 
 
-# def application(environ, start_response):
-#     app = BBoard(Session())
-#     return app(environ, start_response)
+def application(environ, start_response):
+    app = BBoard(Session())
+    return app(environ, start_response)
 
 
-if __name__ == "__main__":
-    from werkzeug.serving import run_simple
-
-    run_simple(
-        "127.0.0.1",
-        5000,
-        BBoard(Session()),
-        use_debugger=True,
-        use_reloader=True,
-    )
+# if __name__ == "__main__":
+#     from werkzeug.serving import run_simple
+#
+#     run_simple(
+#         "127.0.0.1",
+#         5000,
+#         BBoard(Session()),
+#         use_debugger=True,
+#         use_reloader=True,
+#     )
