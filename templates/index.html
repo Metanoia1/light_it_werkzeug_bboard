@@ -27,7 +27,6 @@
         <p>Publication date: {{ announcement.created_date.date() }}</p>
         <p>{{ announcement.text }}</p>
         <a href="/{{ announcement.id }}/">details</a>
-        <a class="text-danger" href="/delete/{{ announcement.id }}/">delete</a>
         <!-- <a class="text-danger" href="/delete/{{ announcement.id }}/">delete</a> -->
         <hr>
       {% endfor %}
