@@ -57,6 +57,6 @@ def connect_db():
     return psycopg2.connect(DATABASE_URL, sslmode="require")
 
 engine = create_engine(DATABASE_URL)
-Base.metadata.create_all(connect_db())
+Base.metadata.create_all(engine)
 Session = sessionmaker()
 Session.configure(bind=engine)
