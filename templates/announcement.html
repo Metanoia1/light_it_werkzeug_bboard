@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% block title %}ANNOUNCEMENT{% endblock %}
 {% block body %}
+
   <p>Author: {{ announcement.author }}</p>
   <p>Title: {{ announcement.title }}</p>
   <p>Publication date:
@@ -8,13 +9,31 @@
     {{ announcement.created_date.hour }}:{{ announcement.created_date.minute }}
   </p>
   <p>{{ announcement.text }}</p>
+
+  <hr>
+  <h4>leave your comment here:</h4>
+  <br>
+  <form method="POST">
+    <input class="form-control" type="text" maxlength="100" required
+      name="author" 
+      placeholder="author"><br>
+    <textarea class="form-control" name="text" rows="3" required
+      maxlength="170"></textarea><br>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">comment</button>
+    </div>
+  </form>
+
   {% if comments %}
     <hr>
     <h5>comments:</h5>
   {% endif %}
+
   {% for comment in comments %}
     <hr>
     <p>author: {{ comment.author }}</p>
     <p>{{ comment.text }}</p>
   {% endfor %}
+  <br>
+
 {% endblock %}

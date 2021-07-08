@@ -8,7 +8,7 @@
     integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
     crossorigin="anonymous">
 
-  <title>{% block title %}INDEX{% endblock%}</title>
+  <title>{% block title %}ANNOUNCEMENTS{% endblock%}</title>
 </head>
 <body class="bg-light">
 
@@ -17,6 +17,11 @@
   <div class="container-fluid">
     <br>
     {% block body %}
+
+      {% if not announcements[0] %}
+        <h1>add your first announcement</h1>
+      {% endif %}
+
       {% for announcement in announcements %}
         <p>Title: {{ announcement.title }}</p>
         <p>Publication date:
@@ -24,7 +29,8 @@
           {{ announcement.created_date.hour }}:{{ announcement.created_date.minute }}
         </p>
         <p>{{ announcement.text }}</p>
-        <a href="/announcement/{{ announcement.id }}/">details</a>
+        <a href="/{{ announcement.id }}/">details</a>
+        <a class="text-danger" href="/delete/{{ announcement.id }}/">delete</a>
         <hr>
       {% endfor %}
     {% endblock %}

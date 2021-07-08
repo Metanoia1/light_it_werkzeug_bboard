@@ -10,14 +10,9 @@ from sqlalchemy import (
     create_engine,
     Column,
     Integer,
-    Index,
-    Date,
     DateTime,
-    Numeric,
-    BigInteger,
     String,
     ForeignKey,
-    Boolean,
 )
 
 
@@ -27,8 +22,6 @@ DATABASE_URL = f"postgresql{DATABASE_URL[len('postgres'):]}"
 conn = psycopg2.connect(DATABASE_URL, sslmode="require")
 Base = declarative_base()
 
-time_now = timezone("Europe/Kiev").localize(datetime.now())
-
 
 class Announcement(Base):
     __tablename__ = "announcements"
@@ -37,8 +30,12 @@ class Announcement(Base):
     author = Column(String(length=100))
     title = Column(String(length=100))
     text = Column(String(length=1000))
-    created_date = Column(DateTime, default=time_now)
-    comments = relationship("Comment")
+    created_date = Column(DateTime)
+    comments = relationship("Comment", cascade="all,delete")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.created_date = timezone("Europe/Kiev").localize(datetime.now())
 
     def __repr__(self):
         return f"{self.title} ({self.author})"
@@ -58,6 +55,5 @@ class Comment(Base):
 
 engine = create_engine(DATABASE_URL)
 Base.metadata.create_all(engine)
-
 Session = sessionmaker()
 Session.configure(bind=engine)
