@@ -52,11 +52,11 @@ class Comment(Base):
 # DATABASE_URL = os.environ["BBOARD"]
 DATABASE_URL = os.environ["DATABASE_URL"]
 DATABASE_URL = f"postgresql{DATABASE_URL[len('postgres'):]}"
-engine = create_engine(DATABASE_URL)
-Base.metadata.create_all(engine)
-Session = sessionmaker()
-Session.configure(bind=engine)
-
 
 def connect_db():
     return psycopg2.connect(DATABASE_URL, sslmode="require")
+
+engine = create_engine(DATABASE_URL)
+Base.metadata.create_all(connect_db())
+Session = sessionmaker()
+Session.configure(bind=engine)

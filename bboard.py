@@ -14,7 +14,6 @@ from db_settings import Announcement, Comment, Session, connect_db
 
 class BBoard:
     def __init__(self, session):
-        self.conn = connect_db()
         self.session = session
         template_path = os.path.join(os.path.dirname(__file__), "templates")
         self.jinja_env = Environment(
