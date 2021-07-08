@@ -49,6 +49,7 @@ class BBoard:
     def on_index(self, request):
         announcements = self.session.query(Announcement).all()[::-1]
         context = {"announcements": announcements}
+        self.session.close()
         return self.render_template("index.html", **context)
 
     def on_delete(self, request, id_):
@@ -56,6 +57,7 @@ class BBoard:
         if announcement:
             self.session.delete(announcement)
             self.session.commit()
+        self.session.close()
         return redirect("/")
 
     def on_add_announcement(self, request):
@@ -67,7 +69,9 @@ class BBoard:
             )
             self.session.add(new_announcement)
             self.session.commit()
+            self.session.close()
             return redirect("/")
+        self.session.close()
         return self.render_template("add_announcement.html")
 
     def on_announcement(self, request, id_):
@@ -79,14 +83,17 @@ class BBoard:
             )
             self.session.add(new_comment)
             self.session.commit()
+            self.session.close()
             return redirect(f"/{id_}/")
         announcement = (
             self.session.query(Announcement).filter_by(id=id_).first()
         )
         if not announcement:
+            self.session.close()
             return redirect("/")
         comments = announcement.comments[::-1]
         context = {"announcement": announcement, "comments": comments}
+        self.session.close()
         return self.render_template("announcement.html", **context)
 
     def __call__(self, environ, start_response):
