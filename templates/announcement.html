@@ -1,17 +1,17 @@
 {% extends "index.html" %}
+
 {% block title %}ANNOUNCEMENT{% endblock %}
+
 {% block body %}
 
   <p>Author: {{ announcement.author }}</p>
   <p>Title: {{ announcement.title }}</p>
-  <p>Publication date:
-    {{ announcement.created_date.date() }}
-    {{ announcement.created_date.hour }}:{{ announcement.created_date.minute }}
-  </p>
+  <p>Publication date: {{ announcement.created_date.date() }}</p>
   <p>{{ announcement.text }}</p>
 
   <hr>
   <h4>leave your comment here:</h4>
+
   <br>
   <form method="POST">
     <input class="form-control" type="text" maxlength="100" required
