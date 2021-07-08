@@ -23,8 +23,7 @@ class BBoard:
         self.url_map = Map(
             [
                 Rule("/", endpoint="index"),
-                Rule("/add-announcement/", endpoint="add_announcement"),
-                Rule("/<int:id_>/", endpoint="announcement"),
+                Rule("/add-announcement/", endpoint="add_announcement"), Rule("/<int:id_>/", endpoint="announcement"),
                 Rule("/delete/<int:id_>/", endpoint="delete"),
             ],
         )
@@ -56,7 +55,6 @@ class BBoard:
         if announcement:
             self.session.delete(announcement)
             self.session.commit()
-            self.session.close()
         return redirect("/")
 
     def on_add_announcement(self, request):
@@ -68,7 +66,6 @@ class BBoard:
             )
             self.session.add(new_announcement)
             self.session.commit()
-            self.session.close()
             return redirect("/")
         return self.render_template("add_announcement.html")
 
@@ -81,7 +78,6 @@ class BBoard:
             )
             self.session.add(new_comment)
             self.session.commit()
-            self.session.close()
             return redirect(f"/{id_}/")
         announcement = (
             self.session.query(Announcement).filter_by(id=id_).first()
@@ -96,16 +92,18 @@ class BBoard:
         return self.wsgi_app(environ, start_response)
 
 
-# if __name__ == "__main__":
-#     from werkzeug.serving import run_simple
-#
-#     run_simple(
-#         "127.0.0.1",
-#         5000,
-#         BBoard(Session()),
-#         use_debugger=True,
-#         use_reloader=True,
-#     )
-def application(environ, start_response):
-    app = BBoard(Session())
-    return app(environ, start_response)
+# def application(environ, start_response):
+#     app = BBoard(Session())
+#     return app(environ, start_response)
+
+
+if __name__ == "__main__":
+    from werkzeug.serving import run_simple
+
+    run_simple(
+        "127.0.0.1",
+        5000,
+        BBoard(Session()),
+        use_debugger=True,
+        use_reloader=True,
+    )
