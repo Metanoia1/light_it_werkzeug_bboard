@@ -7,14 +7,14 @@
   <br>
   {% if error %}<p class="text-danger"><strong>{{ error }}</strong></p>{% endif %}
   <form method="POST">
-    <input class="form-control" type="text"
+    <input class="form-control" type="text" maxlength="100" required
       name="author" 
       placeholder="author"><br>
-    <input class="form-control" type="text"
+    <input class="form-control" type="text" maxlength="100" required
       name="title"
       placeholder="title"><br>
-    <textarea class="form-control" name="text" rows="3"></textarea>
-    <br>
+    <textarea class="form-control" name="text" rows="3" required
+      maxlength="900"></textarea><br>
     <div class="col-12">
       <button class="btn btn-primary" type="submit">add</button>
     </div>

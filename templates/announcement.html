@@ -15,11 +15,11 @@
   <br>
   {% if error %}<p class="text-danger"><strong>{{ error }}</strong></p>{% endif %}
   <form method="POST">
-    <input class="form-control" type="text"
+    <input class="form-control" type="text" maxlength="100" required
       name="author" 
       placeholder="author"><br>
-    <textarea class="form-control" name="text" rows="3"></textarea>
-    <br>
+    <textarea class="form-control" name="text" rows="3" required
+      maxlength="170"></textarea><br>
     <div class="col-12">
       <button class="btn btn-primary" type="submit">comment</button>
     </div>
