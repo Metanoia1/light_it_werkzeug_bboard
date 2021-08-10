@@ -83,6 +83,7 @@ class BBoard:
         return False
 
     def on_add_announcement(self, request):
+        context = {}
         if request.method == "POST":
             announcement = self._announcement_is_valid(request.values)
             if announcement:
@@ -95,7 +96,7 @@ class BBoard:
                 self.session.commit()
                 self.session.close()
                 return redirect("/")
-            context = {"error": "Validation error! Try again."}
+            context["error"] = "Validation error! Try again."
         return self.render_template("add_announcement.html", **context)
 
     def _comment_is_valid(self, values, announcement_id):
