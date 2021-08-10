@@ -95,7 +95,8 @@ class BBoard:
                 self.session.commit()
                 self.session.close()
                 return redirect("/")
-        return self.render_template("add_announcement.html")
+            context = {"error": "Validation error! Try again."}
+        return self.render_template("add_announcement.html", **context)
 
     def _comment_is_valid(self, values, announcement_id):
         announcement = (
@@ -126,6 +127,7 @@ class BBoard:
         return False
 
     def on_announcement(self, request, id_):
+        context = {}
         if request.method == "POST":
             comment = self._comment_is_valid(request.values, id_)
             if comment:
@@ -138,6 +140,7 @@ class BBoard:
                 self.session.commit()
                 self.session.close()
                 return redirect(f"/{id_}/")
+            context["error"] = "Validation error! Try again."
         announcement = (
             self.session.query(Announcement).filter_by(id=id_).first()
         )
@@ -145,7 +148,8 @@ class BBoard:
             self.session.close()
             return redirect("/")
         comments = announcement.comments[::-1]
-        context = {"announcement": announcement, "comments": comments}
+        context["announcement"] = announcement
+        context["comments"] = comments
         self.session.close()
         return self.render_template("announcement.html", **context)
 

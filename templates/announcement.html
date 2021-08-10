@@ -13,11 +13,12 @@
   <h4>leave your comment here:</h4>
 
   <br>
+  {% if error %}<p class="text-danger"><strong>{{ error }}</strong></p>{% endif %}
   <form method="POST">
-    <input class="form-control" type="text" required
+    <input class="form-control" type="text"
       name="author" 
       placeholder="author"><br>
-    <textarea class="form-control" name="text" rows="3" required></textarea>
+    <textarea class="form-control" name="text" rows="3"></textarea>
     <br>
     <div class="col-12">
       <button class="btn btn-primary" type="submit">comment</button>
