@@ -17,6 +17,7 @@ from sqlalchemy import (
 
 
 Base = declarative_base()
+TIMEZONE = timezone("Europe/Kiev")
 
 
 class Announcement(Base):
@@ -31,7 +32,7 @@ class Announcement(Base):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.created_date = timezone("Europe/Kiev").localize(datetime.now())
+        self.created_date = TIMEZONE.localize(datetime.now())
 
     def __repr__(self):
         return f"{self.title} ({self.author})"
@@ -53,8 +54,10 @@ class Comment(Base):
 DATABASE_URL = os.environ["DATABASE_URL"]
 DATABASE_URL = f"postgresql{DATABASE_URL[len('postgres'):]}"
 
+
 def connect_db():
     return psycopg2.connect(DATABASE_URL, sslmode="require")
+
 
 engine = create_engine(DATABASE_URL)
 conn = Base.metadata.create_all(engine)

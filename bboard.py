@@ -60,31 +60,84 @@ class BBoard:
         self.session.close()
         return redirect("/")
 
+    def _announcement_is_valid(self, values):
+        try:
+            author = str(values["author"]).strip()
+            title = str(values["title"]).strip()
+            text = str(values["text"]).strip()
+            author_len = len(author)
+            title_len = len(title)
+            text_len = len(text)
+            is_valid = (
+                author_len >= 1
+                and author_len <= 100
+                and title_len >= 1
+                and title_len <= 100
+                and text_len >= 1
+                and text_len <= 1000
+            )
+            if is_valid:
+                return {"author": author, "title": title, "text": text}
+        except:
+            pass
+        return False
+
     def on_add_announcement(self, request):
         if request.method == "POST":
-            new_announcement = Announcement(
-                author=f"{request.values['author']}",
-                title=f"{request.values['title']}",
-                text=f"{request.values['text']}",
-            )
-            self.session.add(new_announcement)
-            self.session.commit()
-            self.session.close()
-            return redirect("/")
-        self.session.close()
+            announcement = self._announcement_is_valid(request.values)
+            if announcement:
+                new_announcement = Announcement(
+                    author=f"{announcement['author']}",
+                    title=f"{announcement['title']}",
+                    text=f"{announcement['text']}",
+                )
+                self.session.add(new_announcement)
+                self.session.commit()
+                self.session.close()
+                return redirect("/")
         return self.render_template("add_announcement.html")
+
+    def _comment_is_valid(self, values, announcement_id):
+        announcement = (
+            self.session.query(Announcement)
+            .filter_by(id=announcement_id)
+            .first()
+        )
+        if not announcement:
+            self.session.close()
+            return False
+        try:
+            author = str(values["author"]).strip()
+            text = str(values["text"]).strip()
+            author_len = len(author)
+            text_len = len(text)
+            is_valid = (
+                author_len >= 1
+                and author_len <= 100
+                and text_len >= 1
+                and text_len <= 200
+            )
+            if is_valid:
+                self.session.close()
+                return {"author": author, "text": text, "id": announcement_id}
+        except:
+            pass
+        self.session.close()
+        return False
 
     def on_announcement(self, request, id_):
         if request.method == "POST":
-            new_comment = Comment(
-                author=f"{request.values['author']}",
-                text=f"{request.values['text']}",
-                announcement_id=id_,
-            )
-            self.session.add(new_comment)
-            self.session.commit()
-            self.session.close()
-            return redirect(f"/{id_}/")
+            comment = self._comment_is_valid(request.values, id_)
+            if comment:
+                new_comment = Comment(
+                    author=f"{comment['author']}",
+                    text=f"{comment['text']}",
+                    announcement_id=f"{comment['id']}",
+                )
+                self.session.add(new_comment)
+                self.session.commit()
+                self.session.close()
+                return redirect(f"/{id_}/")
         announcement = (
             self.session.query(Announcement).filter_by(id=id_).first()
         )
